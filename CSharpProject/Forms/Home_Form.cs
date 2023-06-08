@@ -27,10 +27,6 @@ namespace CSharpProject
         {
 
         }
-        public void Zeyad()
-        {
-
-        }
 
         private void Loginbtn_Click(object sender, EventArgs e)
         {
