@@ -27,6 +27,10 @@ namespace CSharpProject
         {
 
         }
+        public void Zeyad()
+        {
+
+        }
 
         private void Loginbtn_Click(object sender, EventArgs e)
         {
@@ -39,7 +43,7 @@ namespace CSharpProject
                 }
                 else
                 {
-                    MessageBox.Show("User Name or Password is NOT correct! try again", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("User Name or Password is NOT correct!try again", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
