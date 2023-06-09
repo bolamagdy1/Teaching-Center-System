@@ -62,7 +62,7 @@ namespace CSharpProject.Forms
         }
 
         private void timer2_Tick(object sender, EventArgs e)
-        {
+        { 
             DateTime dt = DateTime.Now;
             lblTime.Text = dt.ToString("hh:mm:ss");
         }
