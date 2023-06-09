@@ -42,7 +42,9 @@ namespace CSharpProject.Forms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!(textBox1.Text.Length < 5 || textBox2.Text.Length != 11 || comboBox4.Text == "")) {
+            var teachers = _context.Teachers.ToList();
+            if (!(textBox1.Text.Length < 5 || textBox2.Text.Length != 11 || comboBox4.Text == ""))
+            {
                 var teacher = new Teacher()
                 {
                     Name = textBox1.Text,
@@ -54,9 +56,25 @@ namespace CSharpProject.Forms
                     Education_Stage = comboBox6.Text,
                     Level = int.Parse(comboBox5.Text),
                 };
-                _context.Teachers.Add(teacher);
-                _context.SaveChanges();
-                MessageBox.Show("Teacher added Successfully", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                bool exist = false;
+                foreach (var item in teachers)
+                {
+                    if (item.Phone == teacher.Phone)
+                    {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist)
+                {
+                    _context.Teachers.Add(teacher);
+                    _context.SaveChanges();
+                    MessageBox.Show("Teacher added Successfully", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Teacher is already signed", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
                 MessageBox.Show("Data is Not correct", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);

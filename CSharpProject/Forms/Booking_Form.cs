@@ -1,4 +1,5 @@
 ﻿using CSharpProject.Models;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -93,6 +94,8 @@ namespace CSharpProject.Forms
                             _context.Bookings.Add(booking);
                             _context.SaveChanges();
                             MessageBox.Show("Booking Done Successfully", "done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            Whatsapp_Send(student.Phone,student.Name,teacher.Subject,teacher.Name,lesson.Day,lesson.Start_Time,lesson.Hall.HallNo);
                         }
                         else
                         {
@@ -110,6 +113,23 @@ namespace CSharpProject.Forms
             {
                 MessageBox.Show("Data is NOT correct", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        public async void Whatsapp_Send(string phone,string name,string subject,string teacher,string day,string time,int hall)
+        {
+            phone = "+2" + phone;
+            var url = "https://api.ultramsg.com/instance50173/messages/chat";
+            var client = new RestClient(url);
+
+            var request = new RestRequest(url, Method.Post);
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddParameter("token", "gqq0e45l04jsuyxj");
+            request.AddParameter("to", phone);
+            request.AddParameter("body", $"Hello Dear {name}.\nYou Successfully booked a {subject} Lesson in Drooos System with the Great Teacher {teacher} on {day} at {time} in Hall number {hall}.\nWish You All the Best :)");
+
+
+            RestResponse response = await client.ExecuteAsync(request);
+            var output = response.Content;
+            Console.WriteLine(output);
         }
     }
 }

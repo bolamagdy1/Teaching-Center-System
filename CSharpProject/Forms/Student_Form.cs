@@ -55,22 +55,44 @@ namespace CSharpProject.Forms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Student student = new Student()
+            if(textBox1.Text != "" && textBox2.Text!=""&&comboBox1.Text != "" &&comboBox2.Text !="")
+                try
                 {
-                    Name = textBox1.Text,
-                    Phone = textBox2.Text,
-                    Education_Stage = comboBox1.Text,
-                    Level = int.Parse(comboBox2.Text)
-                };
-                _context.Students.Add(student);
-                _context.SaveChanges();
-                MessageBox.Show("Student added Successfully", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception)
+                    var students = _context.Students.ToList();
+                    Student student = new Student()
+                    {
+                        Name = textBox1.Text,
+                        Phone = textBox2.Text,
+                        Education_Stage = comboBox1.Text,
+                        Level = int.Parse(comboBox2.Text)
+                    };
+                    bool exist = false;
+                    foreach (var item in students)
+                    {
+                        if (item.Phone == student.Phone)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (!exist)
+                    {
+                        _context.Students.Add(student);
+                        _context.SaveChanges();
+                        MessageBox.Show("Student added Successfully", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Student is already signed", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Data is NOT correct", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            else
             {
-                MessageBox.Show("Data is NOT correct","Sorry",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Data is NOT correct", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

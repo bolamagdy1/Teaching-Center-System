@@ -30,9 +30,26 @@ namespace CSharpProject.Forms
             try
             {
                 var hall = new Hall() { HallNo = int.Parse(textBox1.Text), Capacity = int.Parse(textBox2.Text) };
-                _context.Halls.Add(hall);
-                _context.SaveChanges();
-                MessageBox.Show("Hall added Successfully", "done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var halls = _context.Halls.ToList();
+                bool exist = false;
+                foreach (var item in halls)
+                {
+                    if (item.HallNo == hall.HallNo)
+                    {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist)
+                {
+                    _context.Halls.Add(hall);
+                    _context.SaveChanges();
+                    MessageBox.Show("Hall added Successfully", "done", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Hall is Already existed", "sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception)
             {
