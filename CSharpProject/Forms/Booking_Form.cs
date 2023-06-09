@@ -37,7 +37,7 @@ namespace CSharpProject.Forms
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        public void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox1.Items.Clear();
             comboBox1.Text = "";

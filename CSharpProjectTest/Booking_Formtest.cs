@@ -12,101 +12,102 @@ namespace CSharpProject
     public class Booking_Formtest
     {
         public Booking_Form _bookingForm;
-        public Mock<Droos> _mockContext;
-        public Mock<IQueryable<Student>> _mockStudents;
-        public Mock<IQueryable<Teacher>> _mockTeachers;
-        public Mock<IQueryable<Lesson>> _mockLessons;
-        public Mock<IQueryable<Hall>> _mockHalls;
-        public Mock<IQueryable<Booking>> _mockBookings;
         public Droos _context;
 
         public Booking_Formtest()
         {
-            _mockContext = new Mock<Droos>();
-            _mockStudents = new Mock<IQueryable<Student>>();
-            _mockTeachers = new Mock<IQueryable<Teacher>>();
-            _mockLessons = new Mock<IQueryable<Lesson>>();
-            _mockHalls = new Mock<IQueryable<Hall>>();
-            _mockBookings = new Mock<IQueryable<Booking>>();
-            _context = new Droos();
             _bookingForm = new Booking_Form();
-
-            _mockContext.Setup(c => c.Students).Returns(_mockStudents.Object);
-            _mockContext.Setup(c => c.Teachers).Returns(_mockTeachers.Object);
-            _mockContext.Setup(c => c.Lessons).Returns(_mockLessons.Object);
-            _mockContext.Setup(c => c.Halls).Returns(_mockHalls.Object);
-            _mockContext.Setup(c => c.Bookings).Returns(_mockBookings.Object);
-        }
-
-        [SetUp]
-        public void Setup()
-        {
-            // Create an instance of the form before each test
-            _mockContext = new Mock<Droos>();
-            _mockStudents = new Mock<IQueryable<Student>>();
-            _mockTeachers = new Mock<IQueryable<Teacher>>();
-            _mockLessons = new Mock<IQueryable<Lesson>>();
-            _mockHalls = new Mock<IQueryable<Hall>>();
-            _mockBookings = new Mock<IQueryable<Booking>>();
-
             _context = new Droos();
-
-            _mockContext.Setup(c => c.Students).Returns(_mockStudents.Object);
-            _mockContext.Setup(c => c.Teachers).Returns(_mockTeachers.Object);
-            _mockContext.Setup(c => c.Lessons).Returns(_mockLessons.Object);
-            _mockContext.Setup(c => c.Halls).Returns(_mockHalls.Object);
-            _mockContext.Setup(c => c.Bookings).Returns(_mockBookings.Object);
         }
 
         [Test]
-        public void Button3_Click_ValidInput_BookingAddedSuccessfully()
+        public void ComboBox2_SelectedIndexChanged_ShouldPopulateComboBox1WithStudents()
         {
             // Arrange
-            _bookingForm.comboBox1.Text = "Student 1";
-            _bookingForm.comboBox2.Text = "Teacher 1";
-            _bookingForm.textBox1.Text = "Monday";
-            _bookingForm.textBox2.Text = "10:00";
-            _bookingForm.textBox3.Text = "1";
+            string teacherName = "mohamed yahyia";
+            string educationStage = "Primary";
+            int level = 1;
+            _bookingForm.comboBox2.Items.Add(teacherName);
 
-            var student = new Student() { Name = "Student 1", StudentID = 1 };
-            var teacher = new Teacher() { Name = "Teacher 1", TeacherId = 1 };
-            var lesson = new Lesson() { Capacity = 10 };
-            var hall = new Hall() { HallNo = 1, HallId = 1 };
+            // Create and add a teacher with matching information
+            var teacher = new Teacher
+            {
+                Name = teacherName,
+                Education_Stage = educationStage,
+                Level = level
+            };
+            _context.Teachers.Add(teacher);
 
-            _mockStudents.Setup(s => s.FirstOrDefault(It.IsAny<Func<Student, bool>>())).Returns(student);
-            _mockTeachers.Setup(t => t.FirstOrDefault(It.IsAny<Func<Teacher, bool>>())).Returns(teacher);
-            _mockLessons.Setup(l => l.FirstOrDefault(It.IsAny<Func<Lesson, bool>>())).Returns(lesson);
-            _mockHalls.Setup(h => h.FirstOrDefault(It.IsAny<Func<Hall, bool>>())).Returns(hall);
+            // Create and add a student with matching information
+            var student = new Student
+            {
+                Name = "ali ahmed",
+                Education_Stage = educationStage,
+                Level = level
+            };
+            _context.Students.Add(student);
+
+            // Act
+            _bookingForm.comboBox2.SelectedIndex = 0;
+            _bookingForm.comboBox2_SelectedIndexChanged(null, EventArgs.Empty);
+
+            // Assert
+            Assert.AreEqual(_bookingForm.comboBox1.Items, Contains.Item(student.Name));
+        }
+
+        [Test]
+        public void Button3_Click_ShouldDecreaseLessonCapacityAndAddBooking()
+        {
+            // Arrange
+            string teacherName = "mohamed yahyia";
+            string educationStage = "Primary";
+            int level = 1;
+            _bookingForm.comboBox2.Items.Add(teacherName);
+
+            // Create and add a teacher with matching information
+            var teacher = new Teacher
+            {
+                Name = teacherName,
+                Education_Stage = educationStage,
+                Level = level
+            };
+            _context.Teachers.Add(teacher);
+
+            // Create and add a student
+            var student = new Student
+            {
+                Name = "ali ahmed",
+                Education_Stage = educationStage,
+                Level = level
+            };
+            _context.Students.Add(student);
+
+            // Create and add a lesson with matching information
+            var lesson = new Lesson
+            {
+                TeacherId = teacher.TeacherId,
+                Day = "Monday",
+                Start_Time = "09:00",
+                Capacity = 1,
+                Hall = new Hall { HallNo = 1 }
+            };
+            _context.Lessons.Add(lesson);
+
+            // Set up UI controls
+            _bookingForm.comboBox2.SelectedIndex = 0;
+            _bookingForm.comboBox1.SelectedIndex = 0;
+            _bookingForm.textBox1.Text = lesson.Day;
+            _bookingForm.textBox2.Text = lesson.Start_Time;
+            _bookingForm.textBox3.Text = lesson.Hall.HallNo.ToString();
 
             // Act
             _bookingForm.button3_Click(null, EventArgs.Empty);
 
             // Assert
-            Assert.AreEqual(9, lesson.Capacity); // Verify that lesson capacity is decremented
-            _mockContext.Verify(c => c.SaveChanges(), Times.Once); // Verify that SaveChanges() was called on the context
-            // Add more assertions as needed
+            Assert.AreEqual(0, lesson.Capacity);
+            Assert.AreEqual(_context.Bookings, Has.Exactly(1).Items);
+            Assert.AreEqual(_context.Bookings, Has.Exactly(1).Property("StudentId").EqualTo(student.StudentID));
         }
 
-        [Test]
-        public void Button3_Click_ExistingBooking_ErrorMessageShown()
-        {
-            // Arrange
-            _bookingForm.comboBox1.Text = "Student 1";
-            _bookingForm.comboBox2.Text = "Teacher 1";
-
-            var student = new Student() { Name = "Student 1", StudentID = 1 };
-            var teacher = new Teacher() { Name = "Teacher 1", TeacherId = 1 };
-
-            _mockStudents.Setup(s => s.FirstOrDefault(It.IsAny<Func<Student, bool>>())).Returns(student);
-            _mockTeachers.Setup(t => t.FirstOrDefault(It.IsAny<Func<Teacher, bool>>())).Returns(teacher);
-            _mockBookings.Setup(b => b.ToList()).Returns(new[] { new Booking() { StudentId = 1 } }.AsQueryable());
-
-            // Act
-            _bookingForm.button3_Click(null, EventArgs.Empty);
-
-            // Assert
-            // Verify that the error message is shown in a MessageBox
-        }
-       
     }
 }
