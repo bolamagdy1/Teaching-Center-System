@@ -56,7 +56,7 @@ namespace CSharpProject.Forms
             textBox2.Text = lesson.Start_Time;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        public void button3_Click(object sender, EventArgs e)
         {
             if (comboBox1.Text != "")
             {

@@ -25,7 +25,7 @@ namespace CSharpProject.Forms
             this.Close();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void button2_Click(object sender, EventArgs e)
         {
             try
             {

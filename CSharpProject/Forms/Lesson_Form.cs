@@ -62,7 +62,7 @@ namespace CSharpProject.Forms
             comboBox4.Text = comboBox4.Items[0].ToString();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void button2_Click(object sender, EventArgs e)
         {
             try
             {

@@ -50,7 +50,7 @@ namespace CSharpProject.Forms
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        public void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {

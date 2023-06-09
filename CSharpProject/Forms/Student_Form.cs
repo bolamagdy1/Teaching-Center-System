@@ -13,7 +13,7 @@ namespace CSharpProject.Forms
 {
     public partial class Student_Form : Form
     {
-        Droos _context;
+        public Droos _context;
         public Student_Form()
         {
             InitializeComponent();
@@ -53,7 +53,7 @@ namespace CSharpProject.Forms
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void button2_Click(object sender, EventArgs e)
         {
             if(textBox1.Text != "" && textBox2.Text!=""&&comboBox1.Text != "" &&comboBox2.Text !="")
                 try

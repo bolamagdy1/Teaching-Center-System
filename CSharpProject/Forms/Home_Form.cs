@@ -28,7 +28,7 @@ namespace CSharpProject
 
         }
 
-        private void Loginbtn_Click(object sender, EventArgs e)
+        public void Loginbtn_Click(object sender, EventArgs e)
         {
             if(Usernametxt.Text != "" &&  Usernametxt.Text != "")
             {

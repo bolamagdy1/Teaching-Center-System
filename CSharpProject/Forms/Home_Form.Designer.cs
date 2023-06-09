@@ -174,8 +174,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox Passwordtxt;
-        private System.Windows.Forms.TextBox Usernametxt;
+        public System.Windows.Forms.TextBox Passwordtxt;
+        public System.Windows.Forms.TextBox Usernametxt;
         private System.Windows.Forms.Button Loginbtn;
         private System.Windows.Forms.Label Passwordlbl;
         private System.Windows.Forms.Label Usernamelbl;

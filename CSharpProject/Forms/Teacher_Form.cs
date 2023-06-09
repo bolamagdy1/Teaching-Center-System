@@ -40,7 +40,7 @@ namespace CSharpProject.Forms
             comboBox4.Enabled = false;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void button2_Click(object sender, EventArgs e)
         {
             var teachers = _context.Teachers.ToList();
             if (!(textBox1.Text.Length < 5 || textBox2.Text.Length != 11 || comboBox4.Text == ""))
